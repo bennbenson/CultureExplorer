@@ -1,0 +1,146 @@
+@using System.Globalization
+@using CultureExplorer.Models.DateTimeFormatViewModels
+@model IndexViewModel
+@{
+	ViewData["Title"] = "Index";
+}
+<h2>DateTimeFormatInfo</h2>
+
+<ul class="nav nav-tabs">
+	@foreach (var cultureInfo in Model.CultureInfos)
+	{
+		string className = null;
+		string id = "invariant";
+		string name = "Invariant";
+		if (string.IsNullOrEmpty(cultureInfo.Name))
+		{
+			className = "active";
+		}
+		else
+		{
+			name = cultureInfo.Name;
+			id = name.Replace("-", "_");
+		}
+		<li role="presentation" class="@className"><a href="#@id" data-toggle="tab">@name</a></li>
+	}
+</ul>
+<div class="tab-content">
+	@foreach (var cultureInfo in Model.CultureInfos)
+	{
+		DateTimeFormatInfo dtfi = Model.FormatInfos[cultureInfo];
+		string className = "";
+		string id = "invariant";
+		if (string.IsNullOrEmpty(cultureInfo.Name))
+		{
+			className = "active in";
+		}
+		else
+		{
+			id = cultureInfo.Name.Replace("-", "_");
+		}
+		<div class="tab-pane fade @className" id="@id">
+			<table class="table table-responsive">
+				<tbody>
+					<tr>
+						<th>Calendar (week rule)</th>
+						<td>@*@dtfi.Calendar -- *@@dtfi.NativeCalendarName (@dtfi.CalendarWeekRule)</td>
+					</tr>
+					<tr>
+						<th>AM/PM Designators</th>
+						<td>
+							@if (!string.IsNullOrEmpty(dtfi.AMDesignator) && !string.IsNullOrEmpty(dtfi.PMDesignator))
+							{
+								@:@dtfi.AMDesignator &nbsp; @dtfi.PMDesignator
+							}
+							else
+							{
+								@:(n/a)
+							}
+						</td>
+					</tr>
+					<tr>
+						<th>Date/Time Separators</th>
+						<td>
+							@if (!string.IsNullOrEmpty(dtfi.DateSeparator) && !string.IsNullOrEmpty(dtfi.TimeSeparator))
+							{
+								@:@dtfi.DateSeparator &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; @dtfi.TimeSeparator
+							}
+						</td>
+					</tr>
+					<tr>
+						<th>FirstDayOfWeek</th>
+						<td>@dtfi.FirstDayOfWeek</td>
+					</tr>
+					<tr>
+						<th>FullDateTimePattern</th>
+						<td>@dtfi.FullDateTimePattern</td>
+					</tr>
+					<tr>
+						<th>UniversalSortableDateTimePattern</th>
+						<td>@dtfi.UniversalSortableDateTimePattern</td>
+					</tr>
+					<tr>
+						<th>SortableDateTimePattern</th>
+						<td>@dtfi.SortableDateTimePattern</td>
+					</tr>
+					<tr>
+						<th>RFC1123Pattern</th>
+						<td>@dtfi.RFC1123Pattern</td>
+					</tr>
+					<tr>
+						<th>LongDatePattern</th>
+						<td>@dtfi.LongDatePattern</td>
+					</tr>
+					<tr>
+						<th>ShortDatePattern</th>
+						<td>@dtfi.ShortDatePattern</td>
+					</tr>
+					<tr>
+						<th>YearMonthPattern</th>
+						<td>@dtfi.YearMonthPattern</td>
+					</tr>
+					<tr>
+						<th>MonthDayPattern</th>
+						<td>@dtfi.MonthDayPattern</td>
+					</tr>
+					<tr>
+						<th>LongTimePattern</th>
+						<td>@dtfi.LongTimePattern</td>
+					</tr>
+					<tr>
+						<th>ShortTimePattern</th>
+						<td>@dtfi.ShortTimePattern</td>
+					</tr>
+					<tr>
+						<th>MonthNames</th>
+						<td>@string.Join(", ", dtfi.MonthNames.Where(x => !string.IsNullOrEmpty(x)))</td>
+					</tr>
+					<tr>
+						<th>MonthGenitiveNames</th>
+						<td>@string.Join(", ", dtfi.MonthGenitiveNames.Where(x => !string.IsNullOrEmpty(x)))</td>
+					</tr>
+					<tr>
+						<th>AbbreviatedMonthNames</th>
+						<td>@string.Join(", ", dtfi.AbbreviatedMonthNames.Where(x => !string.IsNullOrEmpty(x)))</td>
+					</tr>
+					<tr>
+						<th>AbbreviatedMonthGenitiveNames</th>
+						<td>@string.Join(", ", dtfi.AbbreviatedMonthGenitiveNames.Where(x => !string.IsNullOrEmpty(x)))</td>
+					</tr>
+					<tr>
+						<th>DayNames</th>
+						<td>@string.Join(", ", dtfi.DayNames.Where(x => !string.IsNullOrEmpty(x)))</td>
+					</tr>
+					<tr>
+						<th>ShortestDayNames</th>
+						<td>@string.Join(", ", dtfi.ShortestDayNames.Where(x => !string.IsNullOrEmpty(x)))</td>
+					</tr>
+					<tr>
+						<th>AbbreviatedDayNames</th>
+						<td>@string.Join(", ", dtfi.AbbreviatedDayNames.Where(x => !string.IsNullOrEmpty(x)))</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	}
+</div>

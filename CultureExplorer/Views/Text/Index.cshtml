@@ -1,0 +1,72 @@
+﻿@using System.Globalization
+@using CultureExplorer.Models.TextViewModels
+@model IndexViewModel
+@{
+	ViewData["Title"] = "Index";
+}
+<h2>TextInfo</h2>
+
+<ul class="nav nav-tabs">
+	@foreach (var cultureInfo in Model.CultureInfos)
+	{
+		string className = null;
+		string id = "invariant";
+		string name = "Invariant";
+		if (string.IsNullOrEmpty(cultureInfo.Name))
+		{
+			className = "active";
+		}
+		else
+		{
+			name = cultureInfo.Name;
+			id = name.Replace("-", "_");
+		}
+		<li role="presentation" class="@className"><a href="#@id" data-toggle="tab">@name</a></li>
+	}
+</ul>
+<div class="tab-content">
+	@foreach (var cultureInfo in Model.CultureInfos)
+	{
+		TextInfo ti = Model.FormatInfos[cultureInfo];
+		string className = "";
+		string id = "invariant";
+		if (string.IsNullOrEmpty(cultureInfo.Name))
+		{
+			className = "active in";
+		}
+		else
+		{
+			id = cultureInfo.Name.Replace("-", "_");
+		}
+		<div class="tab-pane fade @className" id="@id">
+			<table class="table table-responsive">
+				<tbody>
+					<tr>
+						<th>Culture Name</th>
+						<td>@ti.CultureName</td>
+						<th>ANSI Code Page</th>
+						<td>@ti.ANSICodePage</td>
+					</tr>
+					<tr>
+						<th>LCID</th>
+						<td>@ti.LCID (@($"{ti.LCID:X4}"))</td>
+						<th>EBCDIC Code Page</th>
+						<td>@ti.EBCDICCodePage</td>
+					</tr>
+					<tr>
+						<th>RTL?</th>
+						<td>@(ti.IsRightToLeft ? "Yes" : "No")</td>
+						<th>Mac Code Page</th>
+						<td>@ti.MacCodePage</td>
+					</tr>
+					<tr>
+						<th>List Separator</th>
+						<td>@ti.ListSeparator</td>
+						<th>OEM Code PAge</th>
+						<td>@ti.OEMCodePage</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	}
+</div>

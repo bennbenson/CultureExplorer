@@ -1,0 +1,120 @@
+@using System.Globalization
+@using CultureExplorer.Models.NumberFormatViewModels
+@model IndexViewModel
+@{
+	ViewData["Title"] = "Index";
+}
+<h2>NumberFormatInfo</h2>
+
+<ul class="nav nav-tabs">
+	@foreach (var cultureInfo in Model.CultureInfos)
+	{
+		string className = null;
+		string id = "invariant";
+		string name = "Invariant";
+		if (string.IsNullOrEmpty(cultureInfo.Name))
+		{
+			className = "active";
+		}
+		else
+		{
+			name = cultureInfo.Name;
+			id = name.Replace("-", "_");
+		}
+		<li role="presentation" class="@className"><a href="#@id" data-toggle="tab">@name</a></li>
+	}
+</ul>
+<div class="tab-content">
+	@foreach (var cultureInfo in Model.CultureInfos)
+	{
+		NumberFormatInfo nfi = Model.FormatInfos[cultureInfo];
+		string className = "";
+		string id = "invariant";
+		if (string.IsNullOrEmpty(cultureInfo.Name))
+		{
+			className = "active in";
+		}
+		else
+		{
+			id = cultureInfo.Name.Replace("-", "_");
+		}
+		<div class="tab-pane fade @className" id="@id">
+			<table class="table table-responsive">
+				<tbody>
+					<tr>
+						<th>NaNSymbol</th>
+						<td>@nfi.NaNSymbol</td>
+						<th>PositiveInfinitySymbol</th>
+						<td>@nfi.PositiveInfinitySymbol</td>
+						<th>NegativeInfinitySymbol</th>
+						<td>@nfi.NegativeInfinitySymbol</td>
+					</tr>
+					<tr>
+						<th>PerMilleSymbol</th>
+						<td>@nfi.PerMilleSymbol</td>
+						<th>CurrencySymbol</th>
+						<td>@nfi.CurrencySymbol</td>
+						<th>PercentSymbol</th>
+						<td>@nfi.PercentSymbol</td>
+					</tr>
+					<tr>
+						<th>NumberDecimalDigits</th>
+						<td>@nfi.NumberDecimalDigits</td>
+						<th>CurrencyDecimalDigits</th>
+						<td>@nfi.CurrencyDecimalDigits</td>
+						<th>PercentDecimalDigits</th>
+						<td>@nfi.PercentDecimalDigits</td>
+					</tr>
+					<tr>
+						<th>NumberDecimalSeparator</th>
+						<td>@nfi.NumberDecimalSeparator</td>
+						<th>CurrencyDecimalSeparator</th>
+						<td>@nfi.CurrencyDecimalSeparator</td>
+						<th>PercentDecimalSeparator</th>
+						<td>@nfi.PercentDecimalSeparator</td>
+					</tr>
+					<tr>
+						<th>NumberGroupSizes</th>
+						<td>@string.Join(", ", nfi.NumberGroupSizes.Select(x => x.ToString()))</td>
+						<th>CurrencyGroupSizes</th>
+						<td>@string.Join(", ", nfi.CurrencyGroupSizes.Select(x => x.ToString()))</td>
+						<th>PercentGroupSizes</th>
+						<td>@string.Join(", ", nfi.PercentGroupSizes.Select(x => x.ToString()))</td>
+					</tr>
+					<tr>
+						<th>NumberGroupSeparator</th>
+						<td>@nfi.NumberGroupSeparator</td>
+						<th>CurrencyGroupSeparator</th>
+						<td>@nfi.CurrencyGroupSeparator</td>
+						<th>PercentGroupSeparator</th>
+						<td>@nfi.PercentGroupSeparator</td>
+					</tr>
+					<tr>
+						<th>NumberNegativePattern</th>
+						<td>@nfi.NumberNegativePattern</td>
+						<th>CurrencyNegativePattern</th>
+						<td>@nfi.CurrencyNegativePattern</td>
+						<th>PercentNegativePattern</th>
+						<td>@nfi.PercentNegativePattern</td>
+					</tr>
+					<tr>
+						<th>NativeDigits</th>
+						<td>@string.Join(", ", nfi.NativeDigits.Select(x => x.ToString()))</td>
+						<th>CurrencyPositivePattern</th>
+						<td>@nfi.CurrencyPositivePattern</td>
+						<th>PercentPositivePattern</th>
+						<td>@nfi.PercentPositivePattern</td>
+					</tr>
+					<tr>
+						<th>PositiveSign</th>
+						<td>@nfi.PositiveSign</td>
+						<th>NegativeSign</th>
+						<td>@nfi.NegativeSign</td>
+						<th>DigitSubstitution</th>
+						<td>@nfi.DigitSubstitution</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	}
+</div>
