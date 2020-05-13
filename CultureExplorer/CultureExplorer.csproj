@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net47</TargetFramework>
+    <TargetFrameworks>net47;netcoreapp2.2</TargetFrameworks>
     <DebugType>full</DebugType>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
