@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
 
 namespace CultureExplorer
 {
 	public class Program
 	{
-		public static void Main(string[] args)
-		{
-			CreateWebHostBuilder(args).Build().Run();
-		}
+		public static async Task Main(string[] args) => await CreateWebHostBuilder(args).Build().RunAsync();
 
-		public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+		public static IHostBuilder CreateWebHostBuilder(string[] args)
 		{
-			return WebHost.CreateDefaultBuilder(args).UseStartup<Startup>();
+			return Host.CreateDefaultBuilder(args)
+				.ConfigureWebHostDefaults(webBuilder =>
+				{
+					webBuilder.UseStartup<Startup>();
+				});
 		}
 	}
 }
