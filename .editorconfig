@@ -1,102 +1,241 @@
-# Suppress: EC103 EC115 EC116
+# Suppress: EC103 EC112 EC115 EC116
 # EC103 can be ignored because this is a file designed for a broad range of projects that may not
 #    have all file types.
-# EC115 and EC116 are specious warnings that don't take the into account either the global
-#    configuration or how the two settings interact.
+# EC112 can be ignored because what the EditorConfig editor recognizes is often behind what the IDE
+#    supports and anything that's not really supported is ignored anyway.
+# EC115 and EC116 are specious warnings that do not take into account either the global
+#    configuration or how the two settings interact in practice.
 
 root = true
 
-[*]
-charset = utf-8
-end_of_line = crlf
-insert_final_newline = true
-trim_trailing_whitespace = true
 
-[*.sln]
-charset = utf-8-bom
+[*]
+end_of_line = crlf
+indent_size = 3
+tab_width = 3
+
+
+[*.txt]
 indent_style = tab
 indent_size = 3
 tab_width = 3
 
-[*.{*proj,vcxproj.filters,props,targets}]
-charset = utf-8-bom
-indent_style = space
-indent_size = 2
-tab_width = 2
-
-[*.txt]
-indent_style = tab
 
 [*.md]
 indent_style = space
 indent_size = 4
 tab_width = 4
+
+charset = utf-8
 trim_trailing_whitespace = false
 
-[*.{cs,vb}]
-dotnet_style_qualification_for_field = false:suggestion
-dotnet_style_qualification_for_property = false:suggestion
-dotnet_style_qualification_for_method = false:suggestion
-dotnet_style_qualification_for_event = false:suggestion
-dotnet_style_predefined_type_for_locals_parameters_members = true:warning
-dotnet_style_predefined_type_for_member_access = true:warning
-#dotnet_style_require_accessibility_modifiers = for_non_interface_members:none
-dotnet_style_readonly_field = true:suggestion
-dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:none
-dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:none
-dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:none
-dotnet_style_parentheses_in_other_operators = never_if_unnecessary:none
-dotnet_style_object_initializer = true:none
-dotnet_style_collection_initializer = true:none
-dotnet_style_explicit_tuple_names = true:suggestion
-dotnet_style_prefer_inferred_tuple_names = true:suggestion
-dotnet_style_prefer_inferred_anonymous_type_member_names = false:none
-dotnet_style_prefer_auto_properties = true:none
-dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
-dotnet_style_prefer_conditional_expression_over_assignment = true:none
-dotnet_style_prefer_conditional_expression_over_return = true:none
-dotnet_style_prefer_compound_assignment = true:suggestion
-dotnet_style_coalesce_expression = true:suggestion
-dotnet_style_null_propagation = true:suggestion
-dotnet_sort_system_directives_first = true
-dotnet_separate_import_directive_groups = false
-dotnet_code_quality_unused_parameters = all:none
 
-[*.cs]
-charset = utf-8-bom
+[*.sln]
 indent_style = tab
 indent_size = 3
 tab_width = 3
 
-csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:suggestion
-csharp_style_var_for_built_in_types = false:suggestion
-csharp_style_var_when_type_is_apparent = false:none
-csharp_style_var_elsewhere = false:suggestion
-csharp_style_expression_bodied_methods = true:none
-csharp_style_expression_bodied_constructors = false:none
-csharp_style_expression_bodied_operators = true:none
-csharp_style_expression_bodied_properties = true:none
-csharp_style_expression_bodied_indexers = true:none
-csharp_style_expression_bodied_accessors = true:none
-csharp_style_expression_bodied_lambdas = true:none
+charset = utf-8-bom
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+
+[*.{*proj,vcxproj.filters}]
+indent_style = space
+indent_size = 2
+tab_width = 2
+
+charset = utf-8-bom
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+
+[*.{props,targets,pubxml}]
+indent_style = space
+indent_size = 2
+tab_width = 2
+
+charset = utf-8-bom
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+
+[*.{cs,vb}]
+dotnet_style_qualification_for_field = false:warning
+dotnet_style_qualification_for_property = false:warning
+dotnet_style_qualification_for_method = false:warning
+dotnet_style_qualification_for_event = false:warning
+dotnet_style_predefined_type_for_locals_parameters_members = true:warning
+dotnet_style_predefined_type_for_member_access = true:warning
+
+# IDE0040: "Add Accessibility modifiers"
+# The way this is implemented, it doesn't work properly with partial classes.  Only one part should
+# have the accessibility modifier, but both "always" and "for_non_interface_members" force it on all
+# parts, so those values are counterproductive.
+#dotnet_style_require_accessibility_modifiers = for_non_interface_members:none
+dotnet_style_readonly_field = true:suggestion
+dotnet_style_parentheses_in_arithmetic_binary_operators = never_if_unnecessary:silent
+dotnet_style_parentheses_in_relational_binary_operators = never_if_unnecessary:silent
+dotnet_style_parentheses_in_other_binary_operators = never_if_unnecessary:silent
+dotnet_style_parentheses_in_other_operators = never_if_unnecessary:silent
+dotnet_style_object_initializer = true:none
+dotnet_style_collection_initializer = true:none
+# "dotnet_style_prefer_collection_expression" covers IDE0300, IDE0301, IDE0305 but they need
+# fine-tuning because not all suggestions covered by that rule are desirable.
+dotnet_style_prefer_collection_expression = true:none
+# IDE0300: "Use collection expression for array"
+# Suggests replacing new T[] { <items> } with [.. <items>].
+# IDE0301: "Use collection expression for empty"
+# Suggests replacing Array.Empty<T>() with [].
+dotnet_diagnostic.IDE0300.severity = suggestion
+dotnet_diagnostic.IDE0301.severity = suggestion
+# IDE0305: "Use collection expression for fluent"
+# Suggests replacing "sequence.ToArray()" or "sequence.ToList" with "[.. sequence]".
+# It's a rather obtuse and ridiculous suggestion.
+dotnet_diagnostic.IDE0305.severity = none
+dotnet_style_prefer_auto_properties = true:silent
+dotnet_style_explicit_tuple_names = true:silent
+dotnet_style_prefer_inferred_tuple_names = true:silent
+dotnet_style_prefer_inferred_anonymous_type_member_names = false:none
+dotnet_style_prefer_conditional_expression_over_assignment = true:none
+dotnet_style_prefer_conditional_expression_over_return = true:none
+dotnet_style_prefer_compound_assignment = true:suggestion
+dotnet_style_prefer_simplified_interpolation = true:warning
+dotnet_style_prefer_simplified_boolean_expressions = true:warning
+dotnet_style_operator_placement_when_wrapping = end_of_line:warning
+# IDE0010: "Add missing cases to switch statement"
+# If configured as "suggestion", this will show up even when you have a default case.  In practical
+# scenarios, this is unacceptable noise because the default case is intended to cover those other
+# cases, so "none" is the ideal setting.  The code fix is *not* made available.
+dotnet_diagnostic.IDE0010.severity = none
+# IDE0070: "Use 'System.HashCode.Combine'"
+dotnet_diagnostic.IDE0070.severity = suggestion
+# IDE0082: "Convert typeof to nameof"
+dotnet_diagnostic.IDE0082.severity = suggestion
+dotnet_style_coalesce_expression = true:suggestion
+dotnet_style_null_propagation = true:suggestion
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:warning
+
+# IDE0051: "Remove unused private member" (member never assigned or read)
+dotnet_diagnostic.IDE0051.severity = none
+# IDE0052: "Remove unread private member" (member assigned but never read)
+dotnet_diagnostic.IDE0052.severity = none
+dotnet_code_quality_unused_parameters = non_public:none
+dotnet_remove_unnecessary_suppression_exclusions = all:none
+# IDE0079: "Remove unnecessary suppression"
+# The IDE seems to think the all inline suppressions are unnecessary rather then determining it
+# based on the code.  If you suppress something, you then get a message about it being unnecessary,
+# which is ridiculous.
+dotnet_diagnostic.IDE0079.severity = none
+# IDE0100: "Remove unnecessary equality operator"
+dotnet_diagnostic.IDE0100.severity = error
+# IDE0110: "Remove unnecessary discard"
+dotnet_diagnostic.IDE0110.severity = none
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+# I use a convention for special-purpose exceptions; enforcement of this rule would break that convention.
+dotnet_style_namespace_match_folder = false
+
+# This allows the "create and assign field" refactoring to generate the field as "_camelCase".
+# The additional rules prevent the overreach it otherwise causes, restoring the convention that
+# private const fields are "PascalCase".
+dotnet_naming_style.underscore_camel_case.capitalization = camel_case
+dotnet_naming_style.underscore_camel_case.required_prefix = _
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_symbols.private_const_fields.applicable_kinds = field
+dotnet_naming_symbols.private_const_fields.applicable_accessibilities = private
+dotnet_naming_symbols.private_const_fields.required_modifiers = const
+
+dotnet_naming_rule.private_fields_must_be_underscore_camel_case.symbols = private_fields
+dotnet_naming_rule.private_fields_must_be_underscore_camel_case.style = underscore_camel_case
+dotnet_naming_rule.private_fields_must_be_underscore_camel_case.severity = suggestion
+dotnet_naming_rule.private_const_fields_must_be_pascal_case.symbols = private_const_fields
+dotnet_naming_rule.private_const_fields_must_be_pascal_case.style = pascal_case
+dotnet_naming_rule.private_const_fields_must_be_pascal_case.severity = suggestion
+
+# CA1822: "Member '...' does not access instance data and can be marked as static"
+# Especially when working on a library's surface area, unimplemented functions that don't need to
+# throw NotImplementedException will get this analysis message and it's too noisy.
+dotnet_diagnostic.CA1822.severity = none
+
+
+[*.cs]
+indent_style = tab
+indent_size = 3
+tab_width = 3
+
+charset = utf-8-bom
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+csharp_style_var_for_built_in_types = false:warning
+csharp_style_var_when_type_is_apparent = false:silent
+csharp_style_var_elsewhere = false:silent
+csharp_style_expression_bodied_methods = false:none
+csharp_style_expression_bodied_constructors = false:warning
+csharp_style_expression_bodied_operators = false:none
+csharp_style_expression_bodied_properties = false:none
+csharp_style_expression_bodied_indexers = false:none
+csharp_style_expression_bodied_accessors = false:none
+csharp_style_expression_bodied_lambdas = false:none
 csharp_style_expression_bodied_local_functions = false:none
-csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
 csharp_style_pattern_matching_over_as_with_null_check = true:suggestion
+csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
+csharp_style_prefer_switch_expression = true:suggestion
+csharp_style_prefer_pattern_matching = true:silent
+csharp_style_prefer_not_pattern = true:warning
+csharp_style_prefer_extended_property_pattern = true:suggestion
 csharp_style_inlined_variable_declaration = true:suggestion
 csharp_prefer_simple_default_expression = true:none
-csharp_style_throw_expression = true:none
-csharp_style_conditional_delegate_call = true:suggestion
-csharp_prefer_braces = true:none
-csharp_style_unused_value_expression_statement_preference = discard_variable:silent
-csharp_style_unused_value_assignment_preference = discard_variable:suggestion
+csharp_style_prefer_local_over_anonymous_function = false:silent
+csharp_style_deconstructed_variable_declaration = true:suggestion
 csharp_style_prefer_index_operator = true:suggestion
 csharp_style_prefer_range_operator = true:suggestion
-csharp_style_deconstructed_variable_declaration = true:suggestion
-csharp_style_pattern_local_over_anonymous_function = false:none
-csharp_using_directive_placement = outside_namespace:silent
-csharp_prefer_static_local_function = true:suggestion
+csharp_style_implicit_object_creation_when_type_is_apparent = false:none
+# IDE0072: "Add missing cases to switch expression"
+# If configured as "suggestion", this will show up even when you have a default case.  In practical
+# scenarios, this is unacceptable noise because the default case is intended to cover those other
+# cases, so "none" is ideal.  The code fix is still available, if needed.
+dotnet_diagnostic.IDE0072.severity = none
+# IDE0080: "Remove unnecessary suppression operator"
+dotnet_diagnostic.IDE0080.severity = suggestion
+csharp_style_prefer_tuple_swap = true:suggestion
+# "csharp_style_prefer_method_group_conversion" suggests converting lambdas in the form of
+# "x => Method(x)" to "Method" to leverage method group conversion.  It's preferred, but not
+# required, and should be selected on a case-by-case basis.
+csharp_style_prefer_method_group_conversion = true:none
+# "csharp_style_prefer_primary_constructors" is false:none because primary constructors do not need
+# to be as extensively suggested as this rule demands, and both an unused suggestion and suppressing
+# the suggestion both create undue noise.
+csharp_style_prefer_primary_constructors = false:none
+# "csharp_style_throw_expression" is true:silent because the "Add null check" refactoring needs to
+# generate "?? throw" but this isn't how things should be everywhere.  The severity is not being
+# respected as of 17.4.x so it has to be directly set to 'none' for IDE0270 to compensate for that.
+csharp_style_throw_expression = true:silent
+# IDE0270: "Null check can be simplified" (throw expressions)
+dotnet_diagnostic.IDE0270.severity = none
+csharp_style_conditional_delegate_call = true:suggestion
+csharp_style_prefer_null_check_over_type_check = true:suggestion
+csharp_prefer_braces = when_multiline:silent
 csharp_prefer_simple_using_statement = false:none
-csharp_style_prefer_switch_expression = true:suggestion
+csharp_using_directive_placement = outside_namespace:silent
+csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:suggestion
+csharp_prefer_static_local_function = true:suggestion
+# IDE0064: "Make struct fields writable"
+dotnet_diagnostic.IDE0064.severity = suggestion
+csharp_style_namespace_declarations = file_scoped:suggestion
+# CS1998: "This async method lacks 'await' operators..."
+# This creates large amounts of noise when trying to implement large API surface areas.
+dotnet_diagnostic.CS1998.severity = silent
+csharp_style_unused_value_expression_statement_preference = unused_local_variable:silent
+csharp_style_unused_value_assignment_preference = unused_local_variable:silent
+
 csharp_new_line_before_open_brace = all
 csharp_new_line_before_else = true
 csharp_new_line_before_catch = true
@@ -109,7 +248,7 @@ csharp_indent_switch_labels = true
 csharp_indent_labels = one_less_than_current
 csharp_indent_block_contents = true
 csharp_indent_braces = false
-csharp_indent_case_contents_when_block = true
+csharp_indent_case_contents_when_block = false
 csharp_space_after_cast = false
 csharp_space_after_keywords_in_control_flow_statements = true
 csharp_space_between_parentheses = false
@@ -135,25 +274,79 @@ csharp_space_between_square_brackets = false
 csharp_preserve_single_line_statements = false
 csharp_preserve_single_line_blocks = true
 
+# CA1859: "Use concrete types when possible for improved performance"
+# Choosing concrete return types might improve performance, but this flies in the face of choosing
+# interfaces for broader use, and may incorrectly suggest that future changes to a method should not
+# be able to return a more generalized type.
+dotnet_diagnostic.CA1859.severity = none
+# CA2200: "Rethrow to preserve stack details"
+# 'throw ex;' is disallowed; this rule makes it an error. Forces 'throw;' instead.
+dotnet_diagnostic.CA2200.severity = error
+
+
 [*.vb]
-charset = utf-8-bom
 indent_style = space
 indent_size = 4
 tab_width = 4
 
-visual_basic_preferred_modifier_order = Partial,Public,Private,Protected,Friend,Shared,Static,Shadows,Overridable,MustOverride,NotOverridable,Overloads,Overrides,MustInherit,NotInheritable,Default,ReadOnly,WriteOnly,Dim,Const,WithEvents,Widening,Narrowing,Custom,Async:suggestion
+charset = utf-8-bom
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+visual_basic_preferred_modifier_order = Public,Private,Protected,Friend,Shared,Static,Partial,Shadows,Overridable,MustOverride,NotOverridable,Overloads,Overrides,MustInherit,NotInheritable,Default,ReadOnly,WriteOnly,Dim,Const,WithEvents,Widening,Narrowing,Custom,Async:suggestion
+
+visual_basic_style_prefer_isnot_expression = true:warning
+
+visual_basic_style_unused_value_expression_statement_preference = unused_local_variable:silent
+visual_basic_style_unused_value_assignment_preference = unused_local_variable:silent
+visual_basic_style_prefer_simplified_object_creation = true:warning
+
+# IDE0081: "Remove ByVal"
+dotnet_diagnostic.IDE0081.severity = warning
+
 
 [*.{xml,resx}]
 indent_style = space
 indent_size = 2
 tab_width = 2
 
+charset = utf-8
+
+
 [*.{config,nuspec}]
 indent_style = space
 indent_size = 2
 tab_width = 2
 
-[*.cake]
+
+[*.json]
+indent_style = space
+indent_size = 2
+tab_width = 2
+
+charset = utf-8
+insert_final_newline = true
+
+
+[*.{cshtml,razor}]
+indent_style = space
+indent_size = 4
+tab_width = 4
+
+charset = utf-8
+insert_final_newline = true
+
+
+[*.{js,jsx,ts,tsx}]
 indent_style = tab
 indent_size = 3
 tab_width = 3
+
+charset = utf-8
+insert_final_newline = true
+
+[*.{css,scss,sass}]
+indent_style = space
+indent_size = 2
+tab_width = 2
