@@ -1,30 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using CultureExplorer.Models;
+﻿using System.Diagnostics;
 using CultureExplorer.Models.SharedViewModels;
+using Microsoft.AspNetCore.Mvc;
 
-namespace CultureExplorer.Controllers
+namespace CultureExplorer.Controllers;
+
+public class HomeController : Controller
 {
-	public class HomeController : Controller
+	public IActionResult Index()
 	{
-		public IActionResult Index()
-		{
-			return View();
-		}
+		return View();
+	}
 
-		public IActionResult Privacy()
-		{
-			return View();
-		}
+	public IActionResult Privacy()
+	{
+		return View();
+	}
 
-		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-		public IActionResult Error()
-		{
-			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-		}
+	[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+	public IActionResult Error()
+	{
+		return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 	}
 }

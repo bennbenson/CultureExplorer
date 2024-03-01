@@ -1,31 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using CultureExplorer.Models.NumberFormatViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CultureExplorer.Controllers
+namespace CultureExplorer.Controllers;
+
+public class NumberFormatController : Controller
 {
-	public class NumberFormatController : Controller
+	private static readonly string[] _cultureNames = ["", "en-US", "en-UK", "de-DE", "fr-FR", "es-ES", "it-IT", "ru-RU", "jp-JP"];
+
+
+	public IActionResult Index()
 	{
-		private static readonly	string[] _cultureNames = new string[] { "", "en-US", "en-UK", "de-DE", "fr-FR", "es-ES", "it-IT", "ru-RU", "jp-JP" };
+		var cultureInfos = _cultureNames.Select(name => CultureInfo.GetCultureInfo(name)).ToList();
 
+		var formatInfos = cultureInfos.ToDictionary(x => x, x => x.NumberFormat);
 
-		public IActionResult Index()
-		{
-			var cultureInfos = _cultureNames.Select(name => CultureInfo.GetCultureInfo(name)).ToList();
+		IndexViewModel viewModel = new IndexViewModel(cultureInfos, formatInfos);
 
-			var formatInfos = cultureInfos.ToDictionary(x => x, x => x.NumberFormat);
-
-			IndexViewModel viewModel = new IndexViewModel
-			{
-				CultureInfos = cultureInfos,
-				FormatInfos = formatInfos
-			};
-
-			return View(viewModel);
-		}
+		return View(viewModel);
 	}
 }

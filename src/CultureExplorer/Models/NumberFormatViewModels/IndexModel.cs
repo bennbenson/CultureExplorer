@@ -1,40 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 
-namespace CultureExplorer.Models.NumberFormatViewModels
-{
-	public class IndexModel
-	{
-		public IndexModel()
-		{
-		}
+namespace CultureExplorer.Models.NumberFormatViewModels;
 
-		public IndexModel(IndexModel model)
-		{
-			if (model != null)
-			{
-			}
-		}
-	}
-
-	public class IndexViewModel : IndexModel
-	{
-		public IndexViewModel()
-		{
-		}
-
-		public IndexViewModel(IndexModel model)
-			: base(model)
-		{
-			if (model is IndexViewModel viewModel)
-			{
-				CultureInfos = viewModel.CultureInfos;
-				FormatInfos = viewModel.FormatInfos;
-			}
-		}
-
-
-		public IEnumerable<CultureInfo> CultureInfos { get; set; }
-		public IDictionary<CultureInfo, NumberFormatInfo> FormatInfos { get; set; }
-	}
-}
+public record class IndexViewModel(
+	IEnumerable<CultureInfo> CultureInfos,
+	IDictionary<CultureInfo, NumberFormatInfo> FormatInfos);

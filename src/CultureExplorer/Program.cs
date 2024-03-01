@@ -1,20 +1,36 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace CultureExplorer
-{
-	public class Program
-	{
-		public static async Task Main(string[] args) => await CreateWebHostBuilder(args).Build().RunAsync();
+namespace CultureExplorer;
 
-		public static IHostBuilder CreateWebHostBuilder(string[] args)
+internal static class Program
+{
+	private static void Main(string[] args)
+	{
+		WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+		builder.Services.AddControllersWithViews();
+
+		WebApplication app = builder.Build();
+
+		if (app.Environment.IsDevelopment())
 		{
-			return Host.CreateDefaultBuilder(args)
-				.ConfigureWebHostDefaults(webBuilder =>
-				{
-					webBuilder.UseStartup<Startup>();
-				});
+			app.UseDeveloperExceptionPage();
 		}
+		else
+		{
+			app.UseExceptionHandler("/Home/Error");
+		}
+
+		app.UseHttpsRedirection();
+		app.UseStaticFiles();
+
+		app.UseRouting();
+
+		app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+
+		app.Run();
 	}
 }
